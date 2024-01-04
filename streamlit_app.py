@@ -1,12 +1,13 @@
 import streamlit as st
 import google.generativeai as genai
+import variables
 
 gemini_api_key = st.secrets["gemini_api_key"]
 genai.configure(api_key=gemini_api_key)
 session_state = st.session_state
 
 if "model" not in session_state:
-    session_state.model = genai.GenerativeModel("gemini-pro")
+    session_state.model = genai.GenerativeModel("gemini-pro", safety_settings=variables.safety_settings, generation_config=variables.generation_config)
 model = session_state.model
 
 
