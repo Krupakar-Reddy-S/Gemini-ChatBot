@@ -1,5 +1,4 @@
 import streamlit as st
-import textwrap
 import google.generativeai as genai
 
 gemini_api_key = st.secrets["gemini_api_key"]
@@ -10,8 +9,9 @@ if "model" not in session_state:
     session_state.model = genai.GenerativeModel("gemini-pro")
 model = session_state.model
 
+
 def main():
-    st.set_page_config(page_title="Gemini powered Chatbot", page_icon=":robot_face:", layout="wide", initial_sidebar_state="auto")
+    st.set_page_config(page_title="Gemini powered Chatbot", page_icon=":robot_face:", layout="centered", initial_sidebar_state="auto")
 
     st.header("Gemini powered Chatbot :robot_face:")
 
@@ -22,11 +22,11 @@ def main():
         role = "user" if part.role == "user" else "assistant"
         with st.chat_message(role):
             for message_part in part.parts:
-                st.markdown(message_part.text)
+                st.markdown(to_markdown(message_part.text))
 
     if prompt := st.chat_input("What is up?"):
         with st.chat_message("user"):
-            st.markdown(prompt)
+            st.markdown(to_markdown(prompt))
 
         messages = [{"role": "user", "parts": [prompt]}]
 
@@ -50,8 +50,7 @@ def main():
 
 
 def to_markdown(text):
-    text = text.replace("•", " *")
-    return st.markdown(textwrap.indent(text, "> ", predicate=lambda _: True))
+    return text.replace("•", " *")
 
 
 if __name__ == "__main__":
