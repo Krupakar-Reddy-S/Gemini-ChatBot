@@ -1,14 +1,16 @@
 import streamlit as st
 import google.generativeai as genai
+import random
 import variables
 
-gemini_api_key = st.secrets["gemini_api_key"]
-genai.configure(api_key=gemini_api_key)
 session_state = st.session_state
+
+if "gemini_api_key" not in session_state:
+    session_state.gemini_api_key = st.secrets["gemini_api_key" + random.choice(["1", "2", "3", "4", "5"])]
+    genai.configure(api_key=session_state.gemini_api_key)
 
 if "model" not in session_state:
     session_state.model = genai.GenerativeModel("gemini-pro", safety_settings=variables.safety_settings, generation_config=variables.generation_config)
-model = session_state.model
 
 
 def main():
@@ -29,20 +31,25 @@ def main():
         with st.chat_message("user"):
             st.markdown(to_markdown(prompt))
 
-        messages = [{"role": "user", "parts": [prompt]}]
-
         if prompt:
             chat = session_state.chat
-            response = chat.send_message(prompt)
 
-            response_text = response.text
-            with st.chat_message("assistant"):
-                st.markdown(to_markdown(response_text))
+            try:
+                response = chat.send_message(prompt)
+                response_text = response.text
+                with st.chat_message("assistant"):
+                    st.markdown(to_markdown(response_text))
 
-            print(chat.history)
-            print()
+                print(chat.history)
+                print()
 
-            session_state.chat = chat
+                session_state.chat = chat
+
+            except IndexError:
+                st.toast("Wow your are a Hacker!", icon="🧑‍💻")
+                st.error("The Response for your Prompt was empty. Please try again.")
+            except Exception as e:
+                st.exception(e)
 
     with st.sidebar:
         st.subheader("About")
