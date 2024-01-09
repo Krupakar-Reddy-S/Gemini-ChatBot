@@ -1,8 +1,15 @@
-generation_config = {
+generation_config_chat = {
   "temperature": 0.6,
   "top_p": 1,
   "top_k": 32,
   "max_output_tokens": 2048,
+}
+
+generation_config_vision = {
+  "temperature": 0.4,
+  "top_p": 1,
+  "top_k": 32,
+  "max_output_tokens": 4096,
 }
 
 safety_settings = [
