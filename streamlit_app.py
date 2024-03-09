@@ -12,7 +12,7 @@ if "gemini_api_key" not in session_state:
     genai.configure(api_key=session_state.gemini_api_key)
 
 if "model_chat" not in session_state:
-    session_state.model_chat = genai.GenerativeModel("gemini-pro", safety_settings=variables.safety_settings, generation_config=variables.generation_config_chat)
+    session_state.model_chat = genai.GenerativeModel("gemini-1.0-pro-latest", safety_settings=variables.safety_settings, generation_config=variables.generation_config_chat)
 
 if "file_uploader_key" not in session_state:
     session_state.file_uploader_key = "-1"
@@ -33,7 +33,6 @@ def main():
     with st.sidebar:
         st.subheader("About")
         st.markdown("This is a simple chatbot powered by the Gemini API.")
-        st.markdown("Find the source code on GitHub!")
         files = st.file_uploader(label="Upload an Image here", type=["png", "jpg", "jpeg"], key=session_state.file_uploader_key, accept_multiple_files=True)
         if files:
             for file in files:
@@ -74,7 +73,7 @@ def main():
 
         if session_state.images:
             if "model_vision" not in session_state:
-                session_state.model_vision = genai.GenerativeModel("gemini-pro-vision", safety_settings=variables.safety_settings, generation_config=variables.generation_config_vision)
+                session_state.model_vision = genai.GenerativeModel("gemini-1.0-pro-vision-latest", safety_settings=variables.safety_settings, generation_config=variables.generation_config_vision)
 
             vision = session_state.model_vision
             images = [PIL.Image.open(image) for image in session_state.images]
