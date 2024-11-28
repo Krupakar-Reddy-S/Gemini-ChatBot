@@ -15,7 +15,7 @@ if "gemini_api_key" not in session_state:
 
 # Initialize chat model
 if "model_chat" not in session_state:
-    session_state.model_chat = genai.GenerativeModel("gemini-1.0-pro-latest", safety_settings=variables.safety_settings,
+    session_state.model_chat = genai.GenerativeModel("gemini-1.5-flash", safety_settings=variables.safety_settings,
                                                      generation_config=variables.generation_config_chat)
 
 # Initialize file uploader key
